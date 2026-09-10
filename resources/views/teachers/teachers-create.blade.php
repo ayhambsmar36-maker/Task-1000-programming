@@ -20,7 +20,7 @@
         </div>
         <div class="form-group">
             <x-input-label for="specilization" :value="__('التخصص')" />
-            <x-text-area id="specilization" name="specilization" type="text" value="{{ old('specilization') }}" class="mt-1 block w-full" required />
+            <x-text-area id="specilization" name="specialization" type="text" value="{{ old('specilization') }}" class="mt-1 block w-full" required />
             <x-input-error :messages="$errors->get('specilization')" class="mt-2" />
         </div>
        <div class="form-group">
