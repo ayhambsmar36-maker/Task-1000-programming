@@ -1,59 +1,208 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Task 1000 Programming — School Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based school management system for organizing students, teachers, and classrooms through an authenticated dashboard.
 
-## About Laravel
+The application provides CRUD functionality for the core school entities and uses a service-oriented structure to keep business logic separate from controllers.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Secure user authentication with registration, login, logout, email verification, and password reset.
+- Authenticated dashboard for managing school data.
+- Student management:
+  - Add, view, edit, and delete students.
+  - Store contact information and birth dates.
+  - Associate students with classrooms.
+- Teacher management:
+  - Add, view, edit, and delete teachers.
+  - Store contact information and specialization.
+  - Associate teachers with classrooms.
+- Classroom management:
+  - Add, view, edit, and delete classrooms.
+  - Store classroom descriptions and capacity limits.
+- Form validation through dedicated Laravel Form Request classes.
+- Database migrations for users, students, teachers, classrooms, sessions, cache, and jobs.
+- Responsive frontend assets built with Vite, Tailwind CSS, Alpine.js, and AdminLTE.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Technology Stack
 
-## Learning Laravel
+- **Backend:** PHP 8.2+, Laravel 12
+- **Authentication:** Laravel Breeze
+- **Admin interface:** Laravel AdminLTE
+- **Frontend:** Blade, Tailwind CSS, Alpine.js
+- **Build tool:** Vite
+- **Database:** Any database supported by Laravel; SQLite is suitable for local development
+- **Testing:** PHPUnit and Laravel's testing tools
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Requirements
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Before installing the project, make sure you have:
 
-## Laravel Sponsors
+- PHP 8.2 or newer
+- Composer
+- Node.js and npm
+- A database supported by Laravel
+- PHP extensions required by Laravel 12
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation
 
-### Premium Partners
+1. Clone the repository:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+   ```bash
+   git clone https://github.com/ayhambsmar36-maker/Task-1000-programming.git
+   cd Task-1000-programming
+   ```
+
+2. Install PHP dependencies:
+
+   ```bash
+   composer install
+   ```
+
+3. Create the environment file:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   On Windows PowerShell, use:
+
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+4. Generate the application key:
+
+   ```bash
+   php artisan key:generate
+   ```
+
+5. Configure the database connection in `.env`.
+
+   For a simple local SQLite setup:
+
+   ```bash
+   touch database/database.sqlite
+   ```
+
+   Then set the following values in `.env`:
+
+   ```dotenv
+   DB_CONNECTION=sqlite
+   ```
+
+6. Run the migrations:
+
+   ```bash
+   php artisan migrate
+   ```
+
+7. Install frontend dependencies and build the assets:
+
+   ```bash
+   npm install
+   npm run build
+   ```
+
+## Running the Application
+
+Start the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+For frontend development with Vite hot reload, run this in a separate terminal:
+
+```bash
+npm run dev
+```
+
+You can also use the Composer development script to start the application, queue listener, log viewer, and Vite together:
+
+```bash
+composer run dev
+```
+
+Open the application at [http://localhost:8000](http://localhost:8000).
+
+## Main Routes
+
+All application management routes require authentication.
+
+| Area | Route | Purpose |
+| --- | --- | --- |
+| Dashboard | `/` | View the authenticated dashboard |
+| Students | `/students` | Manage students |
+| Teachers | `/teachers` | Manage teachers |
+| Classrooms | `/classrooms` | Manage classrooms |
+| Profile | `/profile` | Manage the authenticated user's profile |
+
+Each management section supports listing records, creating records, viewing details, editing records, and deleting records.
+
+## Project Structure
+
+```text
+app/
+├── Http/Controllers/        Request controllers for the dashboard and CRUD features
+├── Http/Requests/           Validation rules for student, teacher, and classroom forms
+├── Models/                  Eloquent models
+└── Services/                Business logic for students, teachers, and classrooms
+
+database/
+├── migrations/              Database table definitions
+└── seeders/                 Database seed data
+
+resources/
+├── js/                      Alpine.js and application JavaScript
+├── css/                     Application styles
+└── views/                   Blade templates
+
+routes/
+├── Dashboard.php            Dashboard and school management routes
+├── auth.php                 Authentication routes
+└── web.php                  Main web route loader
+```
+
+## Testing
+
+Run the test suite with:
+
+```bash
+composer test
+```
+
+You can also run Laravel tests directly:
+
+```bash
+php artisan test
+```
+
+## Useful Artisan Commands
+
+```bash
+php artisan migrate             # Run database migrations
+php artisan migrate:fresh       # Rebuild the database from scratch
+php artisan route:list           # Display all registered routes
+php artisan config:clear        # Clear cached configuration
+php artisan cache:clear         # Clear the application cache
+```
+
+## Development Notes
+
+- Keep `.env` out of version control. Use `.env.example` as the configuration template.
+- Run `npm run dev` while developing frontend assets and `npm run build` before deployment.
+- Use the existing Form Request classes when adding or modifying validation rules.
+- Keep feature-specific business logic in the appropriate service class rather than placing it directly in controllers.
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Contributions and improvements are welcome. To contribute:
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Create a feature branch.
+2. Make your changes.
+3. Run the test suite and frontend build.
+4. Open a pull request with a clear description of the changes.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
