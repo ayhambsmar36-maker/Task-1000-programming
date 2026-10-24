@@ -30,7 +30,7 @@ The application provides CRUD functionality for the core school entities and use
 - **Admin interface:** Laravel AdminLTE
 - **Frontend:** Blade, Tailwind CSS, Alpine.js
 - **Build tool:** Vite
-- **Database:** Any database supported by Laravel; SQLite is suitable for local development
+- **Database:** MySQL 8.0+
 - **Testing:** PHPUnit and Laravel's testing tools
 
 ## Requirements
@@ -40,7 +40,7 @@ Before installing the project, make sure you have:
 - PHP 8.2 or newer
 - Composer
 - Node.js and npm
-- A database supported by Laravel
+- MySQL 8.0 or newer
 - PHP extensions required by Laravel 12
 
 ## Installation
@@ -70,33 +70,47 @@ Before installing the project, make sure you have:
    Copy-Item .env.example .env
    ```
 
-4. Generate the application key:
+4. Create a MySQL database.
+
+   Using the MySQL command line client:
+
+   ```sql
+   CREATE DATABASE task_1000_programming CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+
+   You can use another database name, but make sure it matches `DB_DATABASE` in your `.env` file.
+
+5. Configure MySQL in `.env`:
+
+   ```dotenv
+   APP_NAME="Task 1000 Programming"
+   APP_ENV=local
+   APP_DEBUG=true
+   APP_URL=http://localhost
+
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=task_1000_programming
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+   Update `DB_USERNAME` and `DB_PASSWORD` if your MySQL installation uses a different account or password.
+
+6. Generate the application key:
 
    ```bash
    php artisan key:generate
    ```
 
-5. Configure the database connection in `.env`.
-
-   For a simple local SQLite setup:
-
-   ```bash
-   touch database/database.sqlite
-   ```
-
-   Then set the following values in `.env`:
-
-   ```dotenv
-   DB_CONNECTION=sqlite
-   ```
-
-6. Run the migrations:
+7. Run the database migrations:
 
    ```bash
    php artisan migrate
    ```
 
-7. Install frontend dependencies and build the assets:
+8. Install frontend dependencies and build the assets:
 
    ```bash
    npm install
@@ -125,6 +139,19 @@ composer run dev
 
 Open the application at [http://localhost:8000](http://localhost:8000).
 
+## MySQL Commands
+
+Use the following commands when working with the MySQL database:
+
+```bash
+php artisan migrate             # Run pending migrations
+php artisan migrate:status      # Show migration status
+php artisan migrate:fresh       # Drop all tables and rebuild the database
+php artisan db:show              # Display database information
+```
+
+> **Warning:** `php artisan migrate:fresh` deletes all existing tables and data in the configured MySQL database. Use it only in development.
+
 ## Main Routes
 
 All application management routes require authentication.
@@ -149,7 +176,7 @@ app/
 └── Services/                Business logic for students, teachers, and classrooms
 
 database/
-├── migrations/              Database table definitions
+├── migrations/              MySQL database table definitions
 └── seeders/                 Database seed data
 
 resources/
@@ -165,6 +192,8 @@ routes/
 
 ## Testing
 
+Make sure the test database configuration is set correctly before running the test suite.
+
 Run the test suite with:
 
 ```bash
@@ -177,19 +206,32 @@ You can also run Laravel tests directly:
 php artisan test
 ```
 
-## Useful Artisan Commands
+## Troubleshooting MySQL
+
+### Access denied for user
+
+Check that `DB_USERNAME` and `DB_PASSWORD` in `.env` match an existing MySQL user. After changing `.env`, clear the cached configuration:
 
 ```bash
-php artisan migrate             # Run database migrations
-php artisan migrate:fresh       # Rebuild the database from scratch
-php artisan route:list           # Display all registered routes
-php artisan config:clear        # Clear cached configuration
-php artisan cache:clear         # Clear the application cache
+php artisan config:clear
 ```
+
+### Unknown database
+
+Create the database manually and ensure the name matches `DB_DATABASE`:
+
+```sql
+CREATE DATABASE task_1000_programming CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### Connection refused
+
+Make sure the MySQL server is running and that `DB_HOST` and `DB_PORT` are correct. The default MySQL port is `3306`.
 
 ## Development Notes
 
 - Keep `.env` out of version control. Use `.env.example` as the configuration template.
+- Do not commit production database credentials.
 - Run `npm run dev` while developing frontend assets and `npm run build` before deployment.
 - Use the existing Form Request classes when adding or modifying validation rules.
 - Keep feature-specific business logic in the appropriate service class rather than placing it directly in controllers.
